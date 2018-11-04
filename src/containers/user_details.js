@@ -12,8 +12,10 @@ class UserDetails extends Component {
 
     return (
       <div>
+      <div>
         <h4>NAME : {this.props.user.name}</h4> 
         <h5>AGE : {this.props.user.age}</h5>
+      </div>
       </div>
     )
   }
@@ -22,7 +24,7 @@ class UserDetails extends Component {
 function mapStateToProps(state){
   console.log(state.activeUser)
   return {
-          user: state.activeUser
+          user: state.activeUser,
   }
 }
 

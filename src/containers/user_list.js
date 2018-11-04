@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {selectUser} from '../actions/index';
+import {selectUser,addData} from '../actions/index';
 
 class UserList extends Component {
 
@@ -17,23 +17,53 @@ class UserList extends Component {
     })
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    // this.props.todo.push()
+    console.log(this.props.todo, this.refs.title.value)
+    var self = this;
+    fetch('http://localhost:9001/task/create', { 
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({
+          title: self.refs.title.value,
+          description: self.refs.description.value
+        })
+      })
+      .then(function(response) {
+        return response.json()
+      }).then(function(body) {
+        console.log(body);
+      });
+  }
+
   render(){
     return(
-      <ol>
-        {this.renderListItems()}
-      </ol>
+      <div>
+        <ol>
+          {this.renderListItems()}
+        </ol>
+        <form onSubmit={this.onSubmit}>
+          <input type="text" placeholder="Title" ref="title"/>
+          <input type="text" placeholder="Description" ref="description"/>
+          <input type="submit" />
+        </form>
+      </div>
     )
   }
 }
 
 function mapStateToProps(state){
   return {
-    users: state.users
+    users: state.users,
   }
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({selectUser: selectUser}, dispatch)
+  return bindActionCreators({selectUser: selectUser, addData: addData}, dispatch)
 }
 
 export default connect(mapStateToProps,matchDispatchToProps)(UserList);
